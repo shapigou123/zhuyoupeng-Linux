@@ -1,0 +1,9 @@
+#first:run the system script file
+::sysinit:/etc/init.d/rcS
+::askfirst:-/bin/sh
+::ctrlaltdel:-/sbin/reboot
+#umount all filesystem
+::shutdown:/bin/umount -a -r
+#restart init process
+::restart:/sbin/init
+

@@ -1,0 +1,14 @@
+---- jpeg_read_scanlines Matches (13 in 4 files) ----
+Djpeg.c (e:\winshare\section_6_project\jpeg-6b):    num_scanlines = jpeg_read_scanlines(&cinfo, dest_mgr->buffer,
+Example.c (e:\winshare\section_6_project\jpeg-6b):  /*           jpeg_read_scanlines(...); */
+Example.c (e:\winshare\section_6_project\jpeg-6b):    /* jpeg_read_scanlines expects an array of pointers to scanlines.
+Example.c (e:\winshare\section_6_project\jpeg-6b):    (void) jpeg_read_scanlines(&cinfo, buffer, 1);
+Example.c (e:\winshare\section_6_project\jpeg-6b): * In the above code, we ignored the return value of jpeg_read_scanlines,
+Jdapistd.c (e:\winshare\section_6_project\jpeg-6b):   * jpeg_read_scanlines or jpeg_read_raw_data.
+Jdapistd.c (e:\winshare\section_6_project\jpeg-6b): * Note: we warn about excess calls to jpeg_read_scanlines() since
+Jdapistd.c (e:\winshare\section_6_project\jpeg-6b):jpeg_read_scanlines (j_decompress_ptr cinfo, JSAMPARRAY scanlines,
+Jpeglib.h (e:\winshare\section_6_project\jpeg-6b):  /* If the buffer passed to jpeg_read_scanlines() is less than this many rows
+Jpeglib.h (e:\winshare\section_6_project\jpeg-6b):  /* Row index of next scanline to be read from jpeg_read_scanlines().
+Jpeglib.h (e:\winshare\section_6_project\jpeg-6b):#define jpeg_read_scanlines	jReadScanlines
+Jpeglib.h (e:\winshare\section_6_project\jpeg-6b):EXTERN(JDIMENSION) jpeg_read_scanlines JPP((j_decompress_ptr cinfo,
+Jpeglib.h (e:\winshare\section_6_project\jpeg-6b):/* Replaces jpeg_read_scanlines when reading raw downsampled data. */

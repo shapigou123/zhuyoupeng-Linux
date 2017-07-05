@@ -1,0 +1,1 @@
+cmd_/mnt/hgfs/Winshare/section_5_drivers/11.net/net_demo/net.ko := /usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-ld -EL -r  -T /root/driver/kernel/scripts/module-common.lds --build-id -o /mnt/hgfs/Winshare/section_5_drivers/11.net/net_demo/net.ko /mnt/hgfs/Winshare/section_5_drivers/11.net/net_demo/net.o /mnt/hgfs/Winshare/section_5_drivers/11.net/net_demo/net.mod.o

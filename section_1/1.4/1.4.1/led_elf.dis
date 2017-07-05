@@ -1,0 +1,39 @@
+
+led.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	e59f002c 	ldr	r0, [pc, #44]	; 34 <flag+0x4>
+   4:	e59f102c 	ldr	r1, [pc, #44]	; 38 <flag+0x8>
+   8:	e5810000 	str	r0, [r1]
+   c:	e3a00000 	mov	r0, #0
+  10:	e59f1024 	ldr	r1, [pc, #36]	; 3c <flag+0xc>
+  14:	e5810000 	str	r0, [r1]
+  18:	e3a00010 	mov	r0, #16
+  1c:	e59f101c 	ldr	r1, [pc, #28]	; 40 <flag+0x10>
+  20:	e5810000 	str	r0, [r1]
+  24:	e3a00002 	mov	r0, #2
+  28:	e59f1014 	ldr	r1, [pc, #20]	; 44 <flag+0x14>
+  2c:	e5810000 	str	r0, [r1]
+
+00000030 <flag>:
+  30:	eafffffe 	b	30 <flag>
+  34:	11111111 	tstne	r1, r1, lsl r1
+  38:	e0200240 	eor	r0, r0, r0, asr #4
+  3c:	e0200244 	eor	r0, r0, r4, asr #4
+  40:	e02000a0 	eor	r0, r0, r0, lsr #1
+  44:	e02000a4 	eor	r0, r0, r4, lsr #1
+
+Disassembly of section .ARM.attributes:
+
+00000000 <.ARM.attributes>:
+   0:	00001a41 	andeq	r1, r0, r1, asr #20
+   4:	61656100 	cmnvs	r5, r0, lsl #2
+   8:	01006962 	tsteq	r0, r2, ror #18
+   c:	00000010 	andeq	r0, r0, r0, lsl r0
+  10:	45543505 	ldrbmi	r3, [r4, #-1285]	; 0x505
+  14:	08040600 	stmdaeq	r4, {r9, sl}
+  18:	Address 0x00000018 is out of bounds.
+

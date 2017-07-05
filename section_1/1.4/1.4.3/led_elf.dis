@@ -1,0 +1,78 @@
+
+led.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	e59f00b4 	ldr	r0, [pc, #180]	; bc <delay_loop+0x10>
+   4:	e59f10b4 	ldr	r1, [pc, #180]	; c0 <delay_loop+0x14>
+   8:	e5810000 	str	r0, [r1]
+   c:	e3a00010 	mov	r0, #16
+  10:	e59f10ac 	ldr	r1, [pc, #172]	; c4 <delay_loop+0x18>
+  14:	e5810000 	str	r0, [r1]
+
+00000018 <flash>:
+  18:	e3a000ff 	mov	r0, #255	; 0xff
+  1c:	e59f10a4 	ldr	r1, [pc, #164]	; c8 <delay_loop+0x1c>
+  20:	e5810000 	str	r0, [r1]
+  24:	e3a00002 	mov	r0, #2
+  28:	e59f109c 	ldr	r1, [pc, #156]	; cc <delay_loop+0x20>
+  2c:	e5810000 	str	r0, [r1]
+  30:	eb00001b 	bl	a4 <_delay>
+  34:	e3e00002 	mvn	r0, #2
+  38:	e59f108c 	ldr	r1, [pc, #140]	; cc <delay_loop+0x20>
+  3c:	e5810000 	str	r0, [r1]
+  40:	eb000017 	bl	a4 <_delay>
+  44:	e3a00002 	mov	r0, #2
+  48:	e59f107c 	ldr	r1, [pc, #124]	; cc <delay_loop+0x20>
+  4c:	e5810000 	str	r0, [r1]
+  50:	e3e00020 	mvn	r0, #32
+  54:	e59f106c 	ldr	r1, [pc, #108]	; c8 <delay_loop+0x1c>
+  58:	e5810000 	str	r0, [r1]
+  5c:	eb000010 	bl	a4 <_delay>
+  60:	e3e00010 	mvn	r0, #16
+  64:	e59f105c 	ldr	r1, [pc, #92]	; c8 <delay_loop+0x1c>
+  68:	e5810000 	str	r0, [r1]
+  6c:	eb00000c 	bl	a4 <_delay>
+  70:	e3e00008 	mvn	r0, #8
+  74:	e59f104c 	ldr	r1, [pc, #76]	; c8 <delay_loop+0x1c>
+  78:	e5810000 	str	r0, [r1]
+  7c:	eb000008 	bl	a4 <_delay>
+  80:	e3a00000 	mov	r0, #0
+  84:	e59f103c 	ldr	r1, [pc, #60]	; c8 <delay_loop+0x1c>
+  88:	e5810000 	str	r0, [r1]
+  8c:	e3e00002 	mvn	r0, #2
+  90:	e59f1034 	ldr	r1, [pc, #52]	; cc <delay_loop+0x20>
+  94:	e5810000 	str	r0, [r1]
+  98:	eb000001 	bl	a4 <_delay>
+  9c:	eaffffdd 	b	18 <flash>
+  a0:	eafffffe 	b	a0 <flash+0x88>
+
+000000a4 <_delay>:
+  a4:	e59f2024 	ldr	r2, [pc, #36]	; d0 <delay_loop+0x24>
+  a8:	e3a03000 	mov	r3, #0
+
+000000ac <delay_loop>:
+  ac:	e2422001 	sub	r2, r2, #1
+  b0:	e1520003 	cmp	r2, r3
+  b4:	1afffffc 	bne	ac <delay_loop>
+  b8:	e1a0f00e 	mov	pc, lr
+  bc:	00111000 	andseq	r1, r1, r0
+  c0:	e0200240 	eor	r0, r0, r0, asr #4
+  c4:	e02000a0 	eor	r0, r0, r0, lsr #1
+  c8:	e0200244 	eor	r0, r0, r4, asr #4
+  cc:	e02000a4 	eor	r0, r0, r4, lsr #1
+  d0:	01312d00 	teqeq	r1, r0, lsl #26
+
+Disassembly of section .ARM.attributes:
+
+00000000 <.ARM.attributes>:
+   0:	00001a41 	andeq	r1, r0, r1, asr #20
+   4:	61656100 	cmnvs	r5, r0, lsl #2
+   8:	01006962 	tsteq	r0, r2, ror #18
+   c:	00000010 	andeq	r0, r0, r0, lsl r0
+  10:	45543505 	ldrbmi	r3, [r4, #-1285]	; 0x505
+  14:	08040600 	stmdaeq	r4, {r9, sl}
+  18:	Address 0x00000018 is out of bounds.
+

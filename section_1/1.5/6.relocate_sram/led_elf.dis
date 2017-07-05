@@ -1,0 +1,125 @@
+
+led.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+d0024000 <_start>:
+d0024000:	e59f0060 	ldr	r0, [pc, #96]	; d0024068 <run_on_dram+0x8>
+d0024004:	e3a01000 	mov	r1, #0
+d0024008:	e5801000 	str	r1, [r0]
+d002400c:	e59fd058 	ldr	sp, [pc, #88]	; d002406c <run_on_dram+0xc>
+d0024010:	ee110f10 	mrc	15, 0, r0, cr1, cr0, {0}
+d0024014:	e3800a01 	orr	r0, r0, #4096	; 0x1000
+d0024018:	ee010f10 	mcr	15, 0, r0, cr1, cr0, {0}
+d002401c:	e24f0024 	sub	r0, pc, #36	; 0x24   //r0 = pc - 0x24=0xd0020010,直接寻址！！（此时PC是运行地址，从d0020010+0x24，为d0020034）
+d0024020:	e59f1048 	ldr	r1, [pc, #72]	; d0024070 <run_on_dram+0x10> 
+ //寄存器间接寻址，pc(两级流水线，值为0xd0020038)向下偏移72个字节，然后寻址这个地址中的内容赋值给r1，r1=d0024000;
+d0024024:	e59f2048 	ldr	r2, [pc, #72]	; d0024074 <run_on_dram+0x14>
+d0024028:	e1500001 	cmp	r0, r1
+d002402c:	0a000003 	beq	d0024040 <clean_bss>
+
+d0024030 <copy_loop>:
+d0024030:	e4903004 	ldr	r3, [r0], #4
+d0024034:	e4813004 	str	r3, [r1], #4
+d0024038:	e1510002 	cmp	r1, r2
+d002403c:	1afffffb 	bne	d0024030 <copy_loop>
+
+d0024040 <clean_bss>:
+d0024040:	e59f002c 	ldr	r0, [pc, #44]	; d0024074 <run_on_dram+0x14>
+d0024044:	e59f102c 	ldr	r1, [pc, #44]	; d0024078 <run_on_dram+0x18>
+d0024048:	e1500001 	cmp	r0, r1
+d002404c:	0a000003 	beq	d0024060 <run_on_dram>
+d0024050:	e3a02000 	mov	r2, #0
+
+d0024054 <clear_loop>:
+d0024054:	e4802004 	str	r2, [r0], #4
+d0024058:	e1500001 	cmp	r0, r1
+d002405c:	1afffffc 	bne	d0024054 <clear_loop>
+
+d0024060 <run_on_dram>:
+d0024060:	e59ff014 	ldr	pc, [pc, #20]	; d002407c <run_on_dram+0x1c>
+d0024064:	eafffffe 	b	d0024064 <run_on_dram+0x4>
+d0024068:	e2700000 	rsbs	r0, r0, #0
+d002406c:	d0037d80 	andle	r7, r3, r0, lsl #27
+d0024070:	d0024000 	andle	r4, r2, r0
+d0024074:	d0024128 	andle	r4, r2, r8, lsr #2
+d0024078:	d0024128 	andle	r4, r2, r8, lsr #2
+d002407c:	d002409c 	mulle	r2, ip, r0          //d002407c 其实是一个函数指针
+d0024080:	00001a41 	andeq	r1, r0, r1, asr #20
+d0024084:	61656100 	cmnvs	r5, r0, lsl #2
+d0024088:	01006962 	tsteq	r0, r2, ror #18
+d002408c:	00000010 	andeq	r0, r0, r0, lsl r0
+d0024090:	45543505 	ldrbmi	r3, [r4, #-1285]	; 0x505
+d0024094:	08040600 	stmdaeq	r4, {r9, sl}
+d0024098:	00010901 	andeq	r0, r1, r1, lsl #18
+
+d002409c <led_blink>:
+d002409c:	e92d4800 	push	{fp, lr}
+d00240a0:	e28db004 	add	fp, sp, #4
+d00240a4:	e59f3028 	ldr	r3, [pc, #40]	; d00240d4 <led_blink+0x38>
+d00240a8:	e59f2028 	ldr	r2, [pc, #40]	; d00240d8 <led_blink+0x3c>
+d00240ac:	e5832000 	str	r2, [r3]
+d00240b0:	e59f3024 	ldr	r3, [pc, #36]	; d00240dc <led_blink+0x40>
+d00240b4:	e3a02000 	mov	r2, #0
+d00240b8:	e5832000 	str	r2, [r3]
+d00240bc:	eb000007 	bl	d00240e0 <delay>
+d00240c0:	e59f3014 	ldr	r3, [pc, #20]	; d00240dc <led_blink+0x40>
+d00240c4:	e3a02038 	mov	r2, #56	; 0x38
+d00240c8:	e5832000 	str	r2, [r3]
+d00240cc:	eb000003 	bl	d00240e0 <delay>
+d00240d0:	eafffff6 	b	d00240b0 <led_blink+0x14>
+d00240d4:	e0200240 	eor	r0, r0, r0, asr #4
+d00240d8:	11111111 	tstne	r1, r1, lsl r1
+d00240dc:	e0200244 	eor	r0, r0, r4, asr #4
+
+d00240e0 <delay>:
+d00240e0:	e52db004 	push	{fp}		; (str fp, [sp, #-4]!)
+d00240e4:	e28db000 	add	fp, sp, #0
+d00240e8:	e24dd00c 	sub	sp, sp, #12
+d00240ec:	e59f3030 	ldr	r3, [pc, #48]	; d0024124 <delay+0x44>
+d00240f0:	e50b3008 	str	r3, [fp, #-8]
+d00240f4:	e51b3008 	ldr	r3, [fp, #-8]
+d00240f8:	e3530000 	cmp	r3, #0
+d00240fc:	03a02000 	moveq	r2, #0
+d0024100:	13a02001 	movne	r2, #1
+d0024104:	e20220ff 	and	r2, r2, #255	; 0xff
+d0024108:	e2433001 	sub	r3, r3, #1
+d002410c:	e50b3008 	str	r3, [fp, #-8]
+d0024110:	e3520000 	cmp	r2, #0
+d0024114:	1afffff6 	bne	d00240f4 <delay+0x14>
+d0024118:	e28bd000 	add	sp, fp, #0
+d002411c:	e8bd0800 	pop	{fp}
+d0024120:	e12fff1e 	bx	lr
+d0024124:	000dbba0 	andeq	fp, sp, r0, lsr #23
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	43434700 	movtmi	r4, #14080	; 0x3700
+   4:	5328203a 	teqpl	r8, #58	; 0x3a
+   8:	6372756f 	cmnvs	r2, #465567744	; 0x1bc00000
+   c:	20797265 	rsbscs	r7, r9, r5, ror #4
+  10:	202b2b47 	eorcs	r2, fp, r7, asr #22
+  14:	6574694c 	ldrbvs	r6, [r4, #-2380]!	; 0x94c
+  18:	30303220 	eorscc	r3, r0, r0, lsr #4
+  1c:	2d337139 	ldfcss	f7, [r3, #-228]!	; 0xffffff1c
+  20:	20293736 	eorcs	r3, r9, r6, lsr r7
+  24:	2e342e34 	mrccs	14, 1, r2, cr4, cr4, {1}
+  28:	Address 0x00000028 is out of bounds.
+
+
+Disassembly of section .ARM.attributes:
+
+00000000 <.ARM.attributes>:
+   0:	00002641 	andeq	r2, r0, r1, asr #12
+   4:	61656100 	cmnvs	r5, r0, lsl #2
+   8:	01006962 	tsteq	r0, r2, ror #18
+   c:	0000001c 	andeq	r0, r0, ip, lsl r0
+  10:	45543505 	ldrbmi	r3, [r4, #-1285]	; 0x505
+  14:	08040600 	stmdaeq	r4, {r9, sl}
+  18:	12010901 	andne	r0, r1, #16384	; 0x4000
+  1c:	15011404 	strne	r1, [r1, #-1028]	; 0x404
+  20:	18031701 	stmdane	r3, {r0, r8, r9, sl, ip}
+  24:	Address 0x00000024 is out of bounds.
+

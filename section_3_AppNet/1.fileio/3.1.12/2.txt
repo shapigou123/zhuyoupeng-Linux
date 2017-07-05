@@ -1,0 +1,152 @@
+DUP(P)                      POSIX Programmer's Manual                     DUP(P)
+
+
+
+NAME
+       dup, dup2 - duplicate an open file descriptor
+
+SYNOPSIS
+       #include <unistd.h>
+
+       int dup(int fildes);
+       int dup2(int fildes, int fildes2);
+
+
+DESCRIPTION
+       The  dup()  and  dup2() functions provide an alternative interface to the
+       service provided by fcntl() using the F_DUPFD command. The call:
+
+
+              fid = dup(fildes);
+
+       shall be equivalent to:
+
+
+              fid = fcntl(fildes, F_DUPFD, 0);
+
+       The call:
+
+
+              fid = dup2(fildes, fildes2);
+
+       shall be equivalent to:
+
+
+              close(fildes2);
+              fid = fcntl(fildes, F_DUPFD, fildes2);
+
+       except for the following:
+
+        * If fildes2 is less than 0 or greater  than  or  equal  to  {OPEN_MAX},
+          dup2() shall return -1 with errno set to [EBADF].
+
+        * If  fildes  is a valid file descriptor and is equal to fildes2, dup2()
+          shall return fildes2 without closing it.
+
+        * If fildes is not a valid file descriptor, dup2() shall return  -1  and
+          shall not close fildes2.
+
+        * The  value  returned  shall be equal to the value of fildes2 upon suc‐
+          cessful completion, or -1 upon failure.
+
+RETURN VALUE
+       Upon successful  completion  a  non-negative  integer,  namely  the  file
+       descriptor,  shall be returned; otherwise, -1 shall be returned and errno
+       set to indicate the error.
+
+ERRORS
+       The dup() function shall fail if:
+
+       EBADF  The fildes argument is not a valid open file descriptor.
+
+       EMFILE The number of file descriptors in use by this process would exceed
+              {OPEN_MAX}.
+
+
+       The dup2() function shall fail if:
+
+       EBADF  The  fildes  argument  is  not a valid open file descriptor or the
+              argument  fildes2  is  negative  or  greater  than  or  equal   to
+              {OPEN_MAX}.
+
+       EINTR  The dup2() function was interrupted by a signal.
+
+
+       The following sections are informative.
+
+EXAMPLES
+   Redirecting Standard Output to a File
+       The  following  example closes standard output for the current processes,
+       re-assigns standard output to go to  the  file  referenced  by  pfd,  and
+       closes the original file descriptor to clean up.
+
+
+              #include <unistd.h>
+              ...
+              int pfd;
+              ...
+              close(1);
+              dup(pfd);
+              close(pfd);
+              ...
+
+   Redirecting Error Messages
+       The following example redirects messages from stderr to stdout.
+
+
+              #include <unistd.h>
+              ...
+              dup2(1, 2);
+              ...
+
+APPLICATION USAGE
+       None.
+
+RATIONALE
+       The  dup()  and  dup2()  functions are redundant. Their services are also
+       provided by the fcntl() function. They have been included in this  volume
+       of  IEEE Std 1003.1-2001  primarily  for  historical  reasons, since many
+       existing applications use them.
+
+       While the brief code segment shown is very similar in behavior to dup2(),
+       a conforming implementation based on other functions defined in this vol‐
+       ume of IEEE Std 1003.1-2001 is significantly more complex. Least  obvious
+       is  the  possible  effect  of  a  signal-catching  function that could be
+       invoked between steps and allocate or deallocate file  descriptors.  This
+       could be avoided by blocking signals.
+
+       The dup2() function is not marked obsolescent because it presents a type-
+       safe version of  functionality  provided  in  a  type-unsafe  version  by
+       fcntl(). It is used in the POSIX Ada binding.
+
+       The dup2() function is not intended for use in critical regions as a syn‐
+       chronization mechanism.
+
+       In the description of [EBADF], the case of fildes being out of  range  is
+       covered by the given case of fildes not being valid. The descriptions for
+       fildes and fildes2 are different because the only kind of invalidity that
+       is  relevant  for fildes2 is whether it is out of range; that is, it does
+       not matter whether fildes2 refers to an open file when the dup2() call is
+       made.
+
+FUTURE DIRECTIONS
+       None.
+
+SEE ALSO
+       close()   ,   fcntl()   ,   open()  ,  the  Base  Definitions  volume  of
+       IEEE Std 1003.1-2001, <unistd.h>
+
+COPYRIGHT
+       Portions of this text are reprinted and  reproduced  in  electronic  form
+       from  IEEE  Std 1003.1, 2003 Edition, Standard for Information Technology
+       -- Portable Operating System Interface (POSIX), The Open Group Base Spec‐
+       ifications  Issue 6, Copyright (C) 2001-2003 by the Institute of Electri‐
+       cal and Electronics Engineers, Inc and The Open Group. In  the  event  of
+       any  discrepancy  between this version and the original IEEE and The Open
+       Group Standard, the original IEEE and The Open Group Standard is the ref‐
+       eree   document.   The  original  Standard  can  be  obtained  online  at
+       http://www.opengroup.org/unix/online.html .
+
+
+
+IEEE/The Open Group                   2003                                DUP(P)
