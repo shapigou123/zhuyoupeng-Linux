@@ -13,14 +13,15 @@
 
 int main(void)
 {
-	#if 1
+	#if 0
 	const char *ret = NULL;
 	struct in_addr addr = {0};
 	char buf[50] = {0};
 	
 	addr.s_addr = 0x6703a8c1;
-	
-	ret = inet_ntop(AF_INET, &addr, buf, sizeof(buf)); //注意返回值的类型要为const char *
+
+	//注意返回值的类型要为const char *
+	ret = inet_ntop(AF_INET, &addr, buf, sizeof(buf)); 
 	if (ret == NULL)
 	{
 		printf("inet_ntop error\n");
@@ -30,7 +31,7 @@ int main(void)
 	printf("ip addr = %s.\n", buf);
     #endif	
 	
-#if 0
+#if 1
 	// 使用inet_pton来转换
 	int ret = 0;
 	struct in_addr addr = {0};

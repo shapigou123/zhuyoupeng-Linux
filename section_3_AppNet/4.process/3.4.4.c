@@ -11,7 +11,7 @@ int main(void)
 	
 	if (p1 == 0)
 	{
-		// 这里一定是子进程
+		// 这里一定是子进程执行的代码
 		
 		// 先sleep一下让父进程先运行，先死
 		//sleep(1);
@@ -23,7 +23,7 @@ int main(void)
 	
 	if (p1 > 0)
 	{
-		// 这里一定是父进程
+		// 这里一定是父进程执行的代码
 		printf("父进程, 父进程ID = %d.\n", getpid());
 		printf("父进程, 子进程ID = %d.\n", p1);
 	}
@@ -33,7 +33,7 @@ int main(void)
 		// 这里一定是fork出错了
 	}
 	
-	// 在这里所做的操作
+	// 在这里所做的操作，父进程和子进程都会打印出来
 	//printf("hello world, pid = %d.\n", getpid());
 
 	return 0;

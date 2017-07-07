@@ -14,7 +14,9 @@ int main(void)
 	int fd = -1, ret = -1;
     int flag = -1;
 	char buf[200];
-	struct pollfd myfds[2] = {0};  //要定义成数组，因为数组有自己的内存空间，而原型中传参是指针，没有内存空间。 再整体初始化为0
+	//要定义成数组，因为数组有自己的内存空间，而原型中传参是指针，
+	//没有内存空间。 再整体初始化为0
+	struct pollfd myfds[2] = {0};  
 	
 	//fd = open("/dev/input/mouse0", O_RDONLY | O_NONBLOCK);
 	fd = open("/dev/input/mouse0", O_RDONLY );
@@ -53,7 +55,8 @@ int main(void)
 	}
 	else
 	{
-		// 等到了一路IO，然后去监测到底是哪个IO到了，处理之。revents文件描述符fd上当前实际发生的事件*
+		// 等到了一路IO，然后去监测到底是哪个IO到了，处理之。
+		// revents文件描述符表示fd上当前实际发生的事件*
 		if (myfds[0].events == myfds[0].revents)
 		{
 			// 这里处理键盘
